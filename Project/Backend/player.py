@@ -32,3 +32,10 @@ class HybridMusicPlayer:
         if song:
             self.history.push(song)
         return song
+    
+    def get_all_songs(self):
+        songs = []
+        for artist in self.library:
+            for album in artist.albums:
+                songs.extend(album.songs)
+        return songs

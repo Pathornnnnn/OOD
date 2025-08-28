@@ -8,6 +8,10 @@ router = APIRouter()
 init_data()
 
 # ----- Library -----
+@router.get("/library/songs")
+def get_songs():
+    return [s.to_dict() for s in player.get_all_songs()]
+
 @router.get("/library/artists")
 def get_artists():
     return [a.to_dict() for a in player.library]

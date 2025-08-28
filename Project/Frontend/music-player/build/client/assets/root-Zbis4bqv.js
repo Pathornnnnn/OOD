@@ -1,0 +1,1 @@
+import{w as e,p as s,O as o,S as r}from"./chunk-PVWAREVJ-BdaTYYtC.js";const i=e(function(){return s.jsxs("html",{children:[s.jsx("head",{children:s.jsx("link",{rel:"icon",href:"data:image/x-icon;base64,AA"})}),s.jsxs("body",{children:[s.jsx("h1",{children:"Hello world!"}),s.jsx(o,{}),s.jsx(r,{})]})]})});export{i as default};
