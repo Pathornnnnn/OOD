@@ -33,6 +33,9 @@ class HybridMusicPlayer:
             self.history.push(song)
         return song
     
+    def get_queue(self):
+        return self.queue.to_list()
+    
     def get_all_songs(self):
         songs = []
         for artist in self.library:

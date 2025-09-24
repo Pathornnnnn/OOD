@@ -3,14 +3,30 @@ import React, { useState, useEffect } from "react";
 import "../index.css";
 import Layout_Artist from "../components/Layout_Artist.jsx";
 import Layout from "../components/Layout.jsx";
+
 export default function Artist_Page() {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  console.log("Backend URL:", backendUrl);
+  
   const [lists, setList] = useState([]);
+
   const fetchArtists = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/library/artists");
+      // Use the environment variable here
+      const response = await axios.get(`${backendUrl}/library/artists`);
       setList(response.data);
     } catch (error) {
       console.log("error", error);
+    }
+  };
+
+  const handleAddSongToQueue = async (songId) => {
+    try {
+      // Use the environment variable here
+      await axios.post(`${backendUrl}/queue/add/${songId}`);
+      console.log(`Song with ID ${songId} added to queue.`);
+    } catch (error) {
+      console.error("Error adding song to queue:", error);
     }
   };
 
@@ -21,29 +37,16 @@ export default function Artist_Page() {
   return (
     <>
       <Layout>
-        {lists.map((artist, artistIndex) => (
-          <div key={artistIndex} className="mb-4">
+        <div className="flex flex-col gap-8">
+          {lists.map((artist) => (
             <Layout_Artist
-              name={artist.name}
-              image={artist.url}
-              albums={artist.albums.map((album) => album.name)}
+              key={artist.id}
+              artist={artist}
+              onAddSong={handleAddSongToQueue}
             />
-          </div>
-        ))}
+          ))}
+        </div>
       </Layout>
     </>
-
-    // <div className="grid grid-cols-4 gap-4">
-    //   {lists.map((artist, artistIndex) => (
-    //     <div key={artistIndex}>
-    //       <div>{artist.name}</div>
-    //       <div>
-    //         {artist.albums?.map((album, albumIndex) => (
-    //           <span key={albumIndex}>{album.name} </span>
-    //         ))}
-    //       </div>
-    //     </div>
-    //   ))}
-    // </div>
   );
 }

@@ -81,3 +81,7 @@ def get_history():
 def clear_history():
     player.history.clear()
     return {"status": "cleared"}
+
+@router.get("/getqueue")
+def getqueue():
+    return player.get_queue()
