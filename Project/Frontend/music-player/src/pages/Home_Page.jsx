@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Layout from '../components/Layout.jsx';
-import MediaPlayerControls from '../components/MediaPlayerControls'; 
+import MediaPlayerControls from '../components/MediaPlayerControls.jsx'; 
 import "../index.css";
 
 export default function Home_Page() {
