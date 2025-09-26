@@ -55,6 +55,11 @@ class CircularDoublyLinkedList:
             self.current = self.current.prev
             return self.current.song
         return None
+    
+    def clear(self):
+        """ล้าง list ทั้งหมด"""
+        self.head = None
+        self.current = None
 
     def get_current_song(self):
         return self.current.song if self.current else None

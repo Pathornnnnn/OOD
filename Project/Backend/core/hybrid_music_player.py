@@ -1,20 +1,28 @@
 from Backend.models.song import Song
+from Backend.structures.ThreeLevelLinkedList import ThreeLevelLinkedList
 from Backend.structures.circular_doubly_linked_list import CircularDoublyLinkedList
 from Backend.structures.stack_history import StackHistory
+from Backend.models.node import ArtistNode, SongNode
+
 
 class HybridMusicPlayer:
     def __init__(self):
-        self.library = Library()
+        # ใช้ ThreeLevelLinkedList (node-based) สำหรับ library
+        self.library = ThreeLevelLinkedList()
+        # Queue เป็น circular doubly linked list
         self.queue = CircularDoublyLinkedList()
+        # History เป็น stack
         self.history = StackHistory()
 
     # ----------------------
     # Library Methods
     # ----------------------
-    def add_artist(self, artist):
-        self.library.add_artist(artist)
+    def add_artist(self, artist_node: ArtistNode):
+        """เพิ่ม artist (node) เข้า library"""
+        self.library.add_artist(artist_node)
 
     def get_all_songs(self):
+        """คืน list ของ Song ทั้งหมดใน library"""
         return self.library.get_all_songs()
 
     # ----------------------
@@ -29,6 +37,10 @@ class HybridMusicPlayer:
         if self.queue.head is None:
             return False
         return self.queue.remove(song_id)
+
+    def clear_queue(self):
+        """ล้าง queue ทั้งหมด"""
+        self.queue.clear()
 
     # ----------------------
     # Player Methods
@@ -54,17 +66,15 @@ class HybridMusicPlayer:
     def get_queue(self):
         return self.queue.to_list()
 
+    # ----------------------
+    # History Methods
+    # ----------------------
+    def clear_history(self):
+        """ล้างประวัติเพลง"""
+        self.history.clear()
 
-class Library:
-    def __init__(self):
-        self.artists = []
 
-    def add_artist(self, artist):
-        self.artists.append(artist)
-
-    def get_all_songs(self):
-        songs = []
-        for artist in self.artists:
-            for album in artist.albums:
-                songs.extend(album.songs)
-        return songs
+# ----------------------
+# Global Player Instance
+# ----------------------
+player = HybridMusicPlayer()

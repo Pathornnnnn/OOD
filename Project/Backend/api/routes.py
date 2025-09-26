@@ -1,9 +1,6 @@
 from fastapi import APIRouter
-from Backend.core.hybrid_music_player import HybridMusicPlayer
-from Backend.models.artist import Artist
-from Backend.models.album import Album
-from Backend.models.song import Song
-from Backend.data.mock_data import init_data, player
+from Backend.core.hybrid_music_player import player
+from Backend.data.mock_data import init_data
 
 router = APIRouter()
 
@@ -17,21 +14,26 @@ def get_songs():
 
 @router.get("/library/artists")
 def get_artists():
-    return [a.to_dict() for a in player.library.artists]
+    return [a.to_dict() for a in player.library.get_all_artists()]
 
 @router.get("/library/artist/{artist_id}")
 def get_artist(artist_id: int):
-    for a in player.library.artists:
-        if a.id == artist_id:
-            return a.to_dict()
+    for artist in player.library.get_all_artists():
+        if artist.id == artist_id:
+            return artist.to_dict()
     return {"error": "Artist not found"}
 
 @router.get("/library/album/{album_id}")
 def get_album(album_id: int):
-    for a in player.library.artists:
-        for al in a.albums:
-            if al.id == album_id:
-                return al.to_dict()
+    for artist_node in player.library.head,:
+        current_artist = player.library.head
+        while current_artist:
+            album_node = current_artist.head_album
+            while album_node:
+                if album_node.album.id == album_id:
+                    return album_node.album.to_dict()
+                album_node = album_node.next_album
+            current_artist = current_artist.next_artist
     return {"error": "Album not found"}
 
 # ----- Queue -----
@@ -41,12 +43,17 @@ def get_queue():
 
 @router.post("/queue/add/{song_id}")
 def add_to_queue(song_id: int):
-    for a in player.library.artists:
-        for al in a.albums:
-            for s in al.songs:
-                if s.id == song_id:
-                    player.add_to_queue(s)
-                    return {"status": "added", "song": s.to_dict()}
+    for artist_node in player.library.get_all_artists():
+        artist_node_obj = player.library.head
+        while artist_node_obj:
+            album_node = artist_node_obj.head_album
+            while album_node:
+                for song in album_node.get_songs():
+                    if song.id == song_id:
+                        player.add_to_queue(song)
+                        return {"status": "added", "song": song.to_dict()}
+                album_node = album_node.next_album
+            artist_node_obj = artist_node_obj.next_artist
     return {"error": "Song not found"}
 
 @router.post("/queue/remove/{song_id}")
@@ -80,7 +87,13 @@ def current_song():
 def get_history():
     return player.history.to_list()
 
+# ----- History -----
 @router.post("/history/clear")
 def clear_history():
-    player.history.clear()
+    player.clear_history()
+    return {"status": "cleared"}
+
+@router.post("/queue/clear")
+def clear_queue():
+    player.clear_queue()
     return {"status": "cleared"}
