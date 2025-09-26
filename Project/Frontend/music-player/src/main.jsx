@@ -1,30 +1,29 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client"; // ✅ ใช้ createRoot
-// import "./index.css";
+import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home_Page from "./pages/Home_Page.jsx";
-import Artist_Page from "./pages/Artist_Page.jsx";
-import SongListPage from "./pages/SongList_Page.jsx";
-import Test_page from "./pages/test.jsx";
+
+import HomePage from "./pages/HomePage";
+import ArtistPage from "./pages/ArtistPage";
+import HistoryDisplay from "./components/HistoryDisplay";
+import DashboardPage from "./pages/DashboardPage";
+import HistoryPage from "./pages/HistoryPage";
+
 // Router ตัวอย่าง
 const router = createBrowserRouter([
-  { path: "/", element: <Home_Page /> },
+  { path: "/", element: <HomePage /> },
   {
-    path: "/app",
-    element: <Home_Page />,
+    path: "/artists",
+    element: <ArtistPage />,
   },
   {
-    path: "/Artist",
-    element: <Artist_Page />,
+    path: "/dashboard",
+    element: <DashboardPage />,
   },
   {
-    path: "/SongList",
-    element: <SongListPage />,
+    path: "/history",
+    element: <HistoryPage />,
   },
-  {
-    path: "/test",
-    element: <Test_page/>,
-  }
 ]);
 
 // ใช้ createRoot ที่ import มาโดยตรง

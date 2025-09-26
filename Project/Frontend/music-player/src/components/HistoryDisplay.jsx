@@ -1,12 +1,12 @@
 import React from "react";
 
-const QueueDisplay = ({ queue, currentSongId }) => {
+const HistoryDisplay = ({ history, currentSongId }) => {
   return (
     <div className="p-4 bg-zinc-900 rounded-lg shadow-xl max-w-md mx-auto">
-      <h2 className="text-xl font-bold text-white mb-4">🎵 Queue</h2>
-      <ul className="space-y-4 relative">
-        {queue.length > 0 ? (
-          queue.map((track, idx) => (
+      <h2 className="text-xl font-bold text-white mb-4">🗂️ History (Stack)</h2>
+      <ul className="space-y-4">
+        {history.length > 0 ? (
+          [...history].reverse().map((track, idx) => (
             <li
               key={track.id}
               className={`
@@ -32,23 +32,17 @@ const QueueDisplay = ({ queue, currentSongId }) => {
                   {("0" + (track.duration % 60)).slice(-2)}
                 </span>
               </div>
-
-              {/* Arrow แสดง Circular Linked List */}
-              {idx < queue.length - 1 && (
-                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-400">
-                  ➡️
-                </div>
-              )}
-              {idx === queue.length - 1 && queue.length > 1 && (
-                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-400 animate-pulse">
-                  🔄
+              {/* Arrow แสดง Stack push */}
+              {idx < history.length - 1 && (
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-green-400 animate-bounce">
+                  ⬆️
                 </div>
               )}
             </li>
           ))
         ) : (
           <li className="text-zinc-500 text-center py-4">
-            The queue is empty. Add some songs!
+            History is empty. Play some songs!
           </li>
         )}
       </ul>
@@ -56,4 +50,4 @@ const QueueDisplay = ({ queue, currentSongId }) => {
   );
 };
 
-export default QueueDisplay;
+export default HistoryDisplay;
