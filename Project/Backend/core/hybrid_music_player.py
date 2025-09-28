@@ -1,6 +1,6 @@
 from Backend.models.song import Song
 from Backend.structures.ThreeLevelLinkedList import ThreeLevelLinkedList
-from Backend.structures.circular_doubly_linked_list import CircularDoublyLinkedList
+from Backend.structures.CircularDequeQueue import CircularDequeQueue
 from Backend.structures.stack_history import StackHistory
 from Backend.models.node import ArtistNode, SongNode
 
@@ -10,7 +10,7 @@ class HybridMusicPlayer:
         # ใช้ ThreeLevelLinkedList (node-based) สำหรับ library
         self.library = ThreeLevelLinkedList()
         # Queue เป็น circular doubly linked list
-        self.queue = CircularDoublyLinkedList()
+        self.queue = CircularDequeQueue()
         # History เป็น stack
         self.history = StackHistory()
 

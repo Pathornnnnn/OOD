@@ -13,3 +13,11 @@ class StackHistory:
 
     def clear(self):
         self.items = []
+
+    def undo(self):
+        """Pop ล่าสุดออกจาก history"""
+        return self.pop()
+
+    def redo(self, song):
+        """Push กลับเข้า history"""
+        self.push(song)

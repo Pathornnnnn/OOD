@@ -57,3 +57,4 @@ class ArtistNode:
             albums.append(current.album)
             current = current.next_album
         return albums
+
