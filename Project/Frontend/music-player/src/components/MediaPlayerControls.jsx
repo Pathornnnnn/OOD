@@ -72,8 +72,7 @@ const MediaPlayerControls = ({
       <div className="flex items-center space-x-4 mb-6 w-full">
         <img
           src={
-            currentSong?.albumCoverUrl ||
-            "https://via.placeholder.com/64?text=No+Cover"
+            currentSong?.url || "https://via.placeholder.com/64?text=No+Cover"
           }
           alt={currentSong?.title || "No song playing"}
           className="w-16 h-16 rounded-lg object-cover shadow-md"
