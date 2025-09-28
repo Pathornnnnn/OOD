@@ -80,7 +80,25 @@ def previous_song():
 @router.get("/player/current")
 def current_song():
     song = player.queue.get_current_song()
-    return song.to_dict() if song else {"error": "No song playing"}
+    
+    if not song:
+        return {"message": "No song playing"}
+    
+    artist_name = None
+    for artist in player.library.get_all_artists():  # ใช้ ThreeLevelLinkedList
+        for album in artist.albums:
+            for s in album.songs:
+                if s.id == song.id:
+                    artist_name = artist.name
+                    break
+                
+    return {
+        "id": song.id,
+        "title": song.title,
+        "duration": song.duration,
+        "url": song.url,
+        "artist": artist_name or "Unknown Artist"
+    }
 
 # ----- History -----
 @router.get("/history")

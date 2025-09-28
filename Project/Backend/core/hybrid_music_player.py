@@ -24,6 +24,7 @@ class HybridMusicPlayer:
     def get_all_songs(self):
         """คืน list ของ Song ทั้งหมดใน library"""
         return self.library.get_all_songs()
+    
 
     # ----------------------
     # Queue Methods
