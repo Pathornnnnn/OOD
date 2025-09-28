@@ -4,33 +4,32 @@ import {
   FaPause,
   FaStepForward,
   FaStepBackward,
-  FaRandom, // Shuffle
   FaVolumeUp,
   FaVolumeMute,
-  FaRedoAlt, // Loop/Repeat
+  FaRedoAlt,
 } from "react-icons/fa";
 
 const MediaPlayerControls = ({
-  currentSong, // { id, title, duration, artist, albumCoverUrl }
-  isPlaying, // boolean
-  currentTime, // current playback time in seconds
-  totalDuration, // total duration of current song in seconds
-  onPlayPause, // function to toggle play/pause
-  onNext, // function to skip to next song
-  onPrevious, // function to skip to previous song
-  onSeek, // function (newTimeInSeconds) to seek
-  onShuffle, // function to toggle shuffle mode
-  onToggleMute, // function to toggle mute
-  onSetVolume, // function (newVolume) to set volume
-  isMuted, // boolean
-  volume, // 0-100
-  onToggleLoop, // function to toggle loop mode
-  isLooping, // boolean
+  currentSong,
+  isPlaying,
+  currentTime,
+  totalDuration,
+  onPlayPause,
+  onNext,
+  onPrevious,
+  onSeek,
+  onToggleMute,
+  onSetVolume,
+  isMuted,
+  volume,
+  onToggleLoop,
+  isLooping,
 }) => {
-  const [localVolume, setLocalVolume] = useState(volume); // Local state for volume slider
+  const [localVolume, setLocalVolume] = useState(volume);
+  const [hoverLoop, setHoverLoop] = useState(false); // hover state
 
   useEffect(() => {
-    setLocalVolume(volume); // Sync local volume with prop
+    setLocalVolume(volume);
   }, [volume]);
 
   const formatTime = (seconds) => {
@@ -46,24 +45,16 @@ const MediaPlayerControls = ({
   const handleProgressBarClick = (event) => {
     const progressBar = event.target.closest(".progress-bar-container");
     if (!progressBar) return;
-
     const rect = progressBar.getBoundingClientRect();
     const clickPosition = event.clientX - rect.left;
-    const newProgressPercentage = (clickPosition / rect.width) * 100;
-
-    const newProgressTime = (newProgressPercentage / 100) * totalDuration;
-
-    if (onSeek) {
-      onSeek(newProgressTime);
-    }
+    const newProgressTime = (clickPosition / rect.width) * totalDuration;
+    if (onSeek) onSeek(newProgressTime);
   };
 
   const handleVolumeChange = (event) => {
     const newVolume = parseInt(event.target.value, 10);
-    setLocalVolume(newVolume); // Update local state immediately for smooth slider
-    if (onSetVolume) {
-      onSetVolume(newVolume); // Call parent handler
-    }
+    setLocalVolume(newVolume);
+    if (onSetVolume) onSetVolume(newVolume);
   };
 
   return (
@@ -72,7 +63,8 @@ const MediaPlayerControls = ({
       <div className="flex items-center space-x-4 mb-6 w-full">
         <img
           src={
-            currentSong?.url || "https://via.placeholder.com/64?text=No+Cover"
+            currentSong?.url ||
+            "https://t4.ftcdn.net/jpg/05/39/89/77/360_F_539897708_p3V5664JtSgb2CMRDV7QnqUJ9eqhLLqy.jpg"
           }
           alt={currentSong?.title || "No song playing"}
           className="w-16 h-16 rounded-lg object-cover shadow-md"
@@ -104,7 +96,7 @@ const MediaPlayerControls = ({
         </div>
       </div>
 
-      {/* Main Controls (Previous, Play/Pause, Next) */}
+      {/* Main Controls */}
       <div className="flex items-center justify-center space-x-6 mb-6">
         <button
           onClick={onPrevious}
@@ -128,18 +120,30 @@ const MediaPlayerControls = ({
         </button>
       </div>
 
-      {/* Additional Controls (Shuffle, Loop, Volume) */}
+      {/* Loop/Replay and Volume */}
       <div className="flex items-center justify-between w-full text-gray-400 text-sm mt-4">
-        {/* Shuffle Button */}
+        {/* Replay/Loop Button */}
+        {/* Replay/Loop Button */}
         <button
-          onClick={onShuffle}
-          className={`p-2 rounded-full transition-colors duration-200 ease-in-out hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 
-            ${
-              onShuffle ? "text-purple-400" : "text-gray-400"
-            } // Highlight if shuffle is active (adjust logic based on your shuffle state)
-          `}
+          onClick={() => {
+            console.log("Loop button clicked! Previous isLooping:", isLooping);
+            onToggleLoop?.();
+          }}
+          onMouseEnter={() => {
+            console.log("Loop hover enter");
+            setHoverLoop(true);
+          }}
+          onMouseLeave={() => {
+            console.log("Loop hover leave");
+            setHoverLoop(false);
+          }}
+          className={`p-2 rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-600 ${
+            isLooping || hoverLoop
+              ? "text-purple-400 hover:text-purple-500 bg-gray-800"
+              : "text-gray-400 hover:bg-gray-700"
+          }`}
         >
-          <FaRandom size={16} />
+          <FaRedoAlt size={16} />
         </button>
 
         {/* Volume Control */}
@@ -161,19 +165,8 @@ const MediaPlayerControls = ({
             value={localVolume}
             onChange={handleVolumeChange}
             className="w-full h-1 bg-zinc-700 rounded-lg appearance-none cursor-pointer range-sm accent-purple-600"
-            style={{ "--tw-accent-color": "#9333ea" }} // Custom accent color for input range
           />
         </div>
-
-        {/* Loop Button */}
-        <button
-          onClick={onToggleLoop}
-          className={`p-2 rounded-full transition-colors duration-200 ease-in-out hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600
-            ${isLooping ? "text-purple-400" : "text-gray-400"}
-          `}
-        >
-          <FaRedoAlt size={16} />
-        </button>
       </div>
     </div>
   );

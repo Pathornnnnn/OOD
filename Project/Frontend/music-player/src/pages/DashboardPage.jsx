@@ -14,6 +14,7 @@ export default function DashboardPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
+  const [isLooping, setIsLooping] = useState(false); // ✅ Loop/Replay state
 
   // Fetch functions
   const fetchQueue = async () => {
@@ -88,6 +89,18 @@ export default function DashboardPage() {
     }
   };
 
+  // Loop/Replay toggle
+  const handleToggleLoop = async () => {
+    try {
+      console.log("Loop button clicked! Previous isLooping:", isLooping);
+      // เรียก backend toggle
+      const response = await axios.post(`${backendUrl}/player/toggle_loop`);
+      setIsLooping(response.data.loop); // update local state
+    } catch (error) {
+      console.error("Error toggling loop:", error);
+    }
+  };
+
   // Queue add
   const handleAddSongToQueue = async (songId) => {
     try {
@@ -127,6 +140,8 @@ export default function DashboardPage() {
           onPlayPause={handlePlayPause}
           onNext={handleNext}
           onPrevious={handlePrevious}
+          onToggleLoop={handleToggleLoop} // ✅ Pass loop toggle
+          isLooping={isLooping} // ✅ Pass current loop state
         />
 
         {/* Queue + History */}

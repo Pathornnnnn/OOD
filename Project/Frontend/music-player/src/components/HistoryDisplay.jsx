@@ -2,24 +2,20 @@ import React from "react";
 
 const HistoryDisplay = ({ history, currentSongId }) => {
   return (
-    <div className="p-4 bg-zinc-900 rounded-lg shadow-xl max-w-md mx-auto">
+    <div className="p-4 bg-zinc-900 rounded-lg shadow-xl max-w-xl mx-auto">
       <h2 className="text-xl font-bold text-white mb-4">🗂️ History (Stack)</h2>
-      <ul className="space-y-4">
+      <ul className="space-y-4 px-4">
         {history.length > 0 ? (
-          [...history].reverse().map((track, idx) => (
+          [...history].reverse().map((track) => (
             <li
               key={track.id}
               className={`
                 p-3 rounded-md transition-all duration-300
-                ${
-                  track.id === currentSongId
-                    ? "bg-purple-600 text-white shadow-lg hover:bg-purple-700"
-                    : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
-                }
                 relative cursor-pointer
+                gap-5
               `}
             >
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center gap-5">
                 <span
                   className={`font-medium truncate ${
                     track.id === currentSongId ? "text-white" : "text-zinc-200"
@@ -32,12 +28,6 @@ const HistoryDisplay = ({ history, currentSongId }) => {
                   {("0" + (track.duration % 60)).slice(-2)}
                 </span>
               </div>
-              {/* Arrow แสดง Stack push */}
-              {idx < history.length - 1 && (
-                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-green-400 animate-bounce">
-                  ⬆️
-                </div>
-              )}
             </li>
           ))
         ) : (
