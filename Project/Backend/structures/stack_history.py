@@ -1,23 +1,38 @@
+# stack_history.py
 class StackHistory:
     def __init__(self):
         self.items = []
+        self.redo_stack = []
 
-    def push(self, song):
-        self.items.append(song)
+    def push(self, song, song_id):
+        """Push ใหม่ แล้วล้าง redo stack"""
+        self.items.append({"song": song, "id": song_id})
+        self.redo_stack.clear()
+
+    def push_direct(self, song, song_id):
+        """ใช้สำหรับ redo ไม่ล้าง redo stack"""
+        self.items.append({"song": song, "id": song_id})
 
     def pop(self):
-        return self.items.pop() if self.items else None
+        if not self.items:
+            return None
+        item = self.items.pop()
+        self.redo_stack.append(item)
+        return item["song"]
+
+    def undo(self):
+        return self.pop()
+
+    def redo(self):
+        if not self.redo_stack:
+            return None
+        item = self.redo_stack.pop()
+        self.push_direct(item["song"], item["id"])
+        return item["song"]
 
     def to_list(self):
-        return [song.to_dict() for song in reversed(self.items)]
+        return [item["song"].to_dict() for item in self.items]
 
     def clear(self):
         self.items = []
-
-    def undo(self):
-        """Pop ล่าสุดออกจาก history"""
-        return self.pop()
-
-    def redo(self, song):
-        """Push กลับเข้า history"""
-        self.push(song)
+        self.redo_stack = []

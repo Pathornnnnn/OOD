@@ -1,6 +1,7 @@
+# queue_node.py
 class QueueNode:
-    def __init__(self, song, index=None):
+    def __init__(self, song):
         self.song = song
-        self.prev = None
         self.next = None
-        self.index = index  # เก็บตำแหน่งใน queue
+        self.prev = None
+        self.index = -1

@@ -93,9 +93,13 @@ def previous_song():
 
 @router.get("/player/current")
 def current_song():
-    song = player.queue.get_current_song()
+    song, idx = player.queue.get_current_song()
     if not song:
         return {"message": "No song playing"}
+
+    # ป้องกันถ้า song ไม่ใช่ object
+    if not hasattr(song, "id"):
+        return {"error": "Invalid song object", "song": str(song)}
 
     artist_name = None
     for artist in player.library.get_all_artists():
@@ -111,6 +115,7 @@ def current_song():
         "duration": song.duration,
         "url": song.url,
         "artist": artist_name or "Unknown Artist",
+        "index": idx
     }
 
 @router.post("/player/toggle_loop")
@@ -130,3 +135,22 @@ def get_history():
 def clear_history():
     player.clear_history()
     return {"status": "cleared"}
+
+
+@router.post("/history/undo")
+def undo_history():
+    song = player.undo_history()
+    if song:
+        # ใส่กลับไปที่ queue (ด้านหน้า)
+        player.queue.add(song)
+    return {"status": "ok", "song": song.to_dict() if song else None}
+
+
+@router.post("/history/redo")
+def redo_history():
+    song = player.redo_history()
+    if song:
+        # ✅ ไม่ต้อง remove ออก
+        # แค่ใส่กลับ queue ก็พอ
+        player.queue.add(song)
+    return {"status": "ok", "song": song.to_dict() if song else None}

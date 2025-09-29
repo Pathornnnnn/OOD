@@ -80,13 +80,13 @@ def init_data():
     
     # (ใส่ album / song เหมือนเดิมหรือเปลี่ยนตามต้องการ)
     album1 = Album(1, "Views", "https://upload.wikimedia.org/wikipedia/en/a/af/Drake_-_Views_cover.jpg")
-    album1.add_song(Song(1, "Hotline Bling", 210, "https://i.ytimg.com/vi/uxpDa-c-4Mc/maxresdefault.jpg"))
-    album1.add_song(Song(2, "One Dance", 200, "https://i1.sndcdn.com/artworks-mS6d7vFc5d7IAkIW-L8hkzg-t500x500.jpg"))
+    album1.add_song(Song("Hotline Bling", 210, "https://i.ytimg.com/vi/uxpDa-c-4Mc/maxresdefault.jpg"))
+    album1.add_song(Song("One Dance", 200, "https://i1.sndcdn.com/artworks-mS6d7vFc5d7IAkIW-L8hkzg-t500x500.jpg"))
     artist1.add_album(album1)
 
     album1b = Album(4, "Scorpion", "https://upload.wikimedia.org/wikipedia/en/9/90/Scorpion_by_Drake.jpg")
-    album1b.add_song(Song(7, "God's Plan", 220, "https://i.ytimg.com/vi/RfO1DTGwIAA/sddefault.jpg"))
-    album1b.add_song(Song(8, "In My Feelings", 205, "https://i.ytimg.com/vi/suz7pWi1mOs/sddefault.jpg"))
+    album1b.add_song(Song("God's Plan", 220, "https://i.ytimg.com/vi/RfO1DTGwIAA/sddefault.jpg"))
+    album1b.add_song(Song("In My Feelings", 205, "https://i.ytimg.com/vi/suz7pWi1mOs/sddefault.jpg"))
     artist1.add_album(album1b)
 
     # -------------------------
@@ -95,13 +95,13 @@ def init_data():
     artist2 = Artist(2, "Lil Uzi Vert", "https://upload.wikimedia.org/wikipedia/commons/4/44/Lil_Uzi_Vert_%282018%29.png")
 
     album2 = Album(2, "Luv Is Rage 2", "https://i.scdn.co/image/ab67616d0000b273f23aee9d3be9fcbca1bc6352")
-    album2.add_song(Song(3, "XO Tour Llif3", 240, "https://i.ytimg.com/vi/WrsFXgQk5UI/hqdefault.jpg"))
-    album2.add_song(Song(4, "The Way Life Goes", 230, "https://i.ytimg.com/vi/Vi2XaiKhgiU/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLDiA1wHYBpPT2q6H2l2b0IqHTb-8g"))
+    album2.add_song(Song("XO Tour Llif3", 240, "https://i.ytimg.com/vi/WrsFXgQk5UI/hqdefault.jpg"))
+    album2.add_song(Song("The Way Life Goes", 230, "https://i.ytimg.com/vi/Vi2XaiKhgiU/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLDiA1wHYBpPT2q6H2l2b0IqHTb-8g"))
     artist2.add_album(album2)
 
     album2b = Album(6, "Eternal Atake", "https://i.scdn.co/image/ab67616d0000b273158b08c02c249bc651b3b47a")
-    album2b.add_song(Song(11, "Baby Pluto", 215, "https://i1.sndcdn.com/artworks-z9V7CpywBmXYV8Jf-BJ5PUA-t500x500.jpg"))
-    album2b.add_song(Song(12, "Futsal Shuffle 2020", 225, "https://i1.sndcdn.com/artworks-1FIrnlRk17n5-0-t500x500.jpg"))
+    album2b.add_song(Song("Baby Pluto", 215, "https://i1.sndcdn.com/artworks-z9V7CpywBmXYV8Jf-BJ5PUA-t500x500.jpg"))
+    album2b.add_song(Song("Futsal Shuffle 2020", 225, "https://i1.sndcdn.com/artworks-1FIrnlRk17n5-0-t500x500.jpg"))
     artist2.add_album(album2b)
 
     # -------------------------
@@ -111,13 +111,13 @@ def init_data():
     artist3 = Artist(3, "Jack Harlow", "https://yt3.googleusercontent.com/6KQV9B-m_cFu0b1aUnUFfbA3IQL5xY5yYgTWwuIEPJgY8p8HzgwtotTeksTzFQtdrJBrwd7i4A=s900-c-k-c0x00ffffff-no-rj")
 
     album3 = Album(3, "Thats What They All Say", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ805A5w_Nhnb4aI42h-bkiCOv8n8x1Nwx3Zg&s")
-    album3.add_song(Song(5, "Whats Poppin", 260, "https://i.ytimg.com/vi/w9uWPBDHEKE/hqdefault.jpg"))
-    album3.add_song(Song(6, "Tyler Herro", 275, "https://upload.wikimedia.org/wikipedia/en/4/45/Jack_Harlow_-_Tyler_Herro.png"))
+    album3.add_song(Song("Whats Poppin", 260, "https://i.ytimg.com/vi/w9uWPBDHEKE/hqdefault.jpg"))
+    album3.add_song(Song("Tyler Herro", 275, "https://upload.wikimedia.org/wikipedia/en/4/45/Jack_Harlow_-_Tyler_Herro.png"))
     artist3.add_album(album3)
 
     album3b = Album(7, "Come Home the Kids Miss You", "https://i.scdn.co/image/ab67616d0000b2738e55edb69ca44a25b52b17bb")
-    album3b.add_song(Song(13, "First Class", 250, "https://i.ytimg.com/vi/yQBImEeXNZ4/maxresdefault.jpg"))
-    album3b.add_song(Song(14, "Nail Tech", 245, "https://i.ytimg.com/vi/e2AeKIzfQus/maxresdefault.jpg"))
+    album3b.add_song(Song("First Class", 250, "https://i.ytimg.com/vi/yQBImEeXNZ4/maxresdefault.jpg"))
+    album3b.add_song(Song("Nail Tech", 245, "https://i.ytimg.com/vi/e2AeKIzfQus/maxresdefault.jpg"))
     artist3.add_album(album3b)
 
     # -------------------------

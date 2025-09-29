@@ -1,9 +1,11 @@
 from typing import Optional
 
-
 class Song:
-    def __init__(self, id: int, title: str, duration: int, url: Optional[str] = None):
-        self.id = id
+    _id_counter = 1  # 🔹 ตัวนับ shared ระดับ class
+
+    def __init__(self, title: str, duration: int, url: Optional[str] = None):
+        self.id = Song._id_counter  # ใช้ค่า counter ปัจจุบัน
+        Song._id_counter += 1       # เพิ่ม counter
         self.title = title
         self.duration = duration
         self.url = url

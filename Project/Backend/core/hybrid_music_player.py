@@ -13,6 +13,7 @@ class HybridMusicPlayer:
         self.queue = CircularDequeQueue()
         # History เป็น stack
         self.history = StackHistory()
+        self.lastPushedId = None  # 🔹 เก็บ id ล่าสุดที่ push
 
     # ----------------------
     # Library Methods
@@ -24,7 +25,6 @@ class HybridMusicPlayer:
     def get_all_songs(self):
         """คืน list ของ Song ทั้งหมดใน library"""
         return self.library.get_all_songs()
-    
 
     # ----------------------
     # Queue Methods
@@ -47,21 +47,24 @@ class HybridMusicPlayer:
     # Player Methods
     # ----------------------
     def play(self):
-        song = self.queue.get_current_song()
-        if song:
-            self.history.push(song)
+        song, _ = self.queue.get_current_song()
+        if song and song.id != self.lastPushedId:  # 🔹 เช็ค id ซ้ำ
+            self.history.push(song, song.id)
+            self.lastPushedId = song.id
         return song
 
     def next(self):
         song = self.queue.next_song()
-        if song:
-            self.history.push(song)
+        if song and song.id != self.lastPushedId:  # 🔹 เช็ค id ซ้ำ
+            self.history.push(song, song.id)
+            self.lastPushedId = song.id
         return song
 
     def previous(self):
         song = self.queue.previous_song()
-        if song:
-            self.history.push(song)
+        if song and song.id != self.lastPushedId:  # 🔹 เช็ค id ซ้ำ
+            self.history.push(song, song.id)
+            self.lastPushedId = song.id
         return song
 
     def get_queue(self):
@@ -73,7 +76,17 @@ class HybridMusicPlayer:
     def clear_history(self):
         """ล้างประวัติเพลง"""
         self.history.clear()
+        self.lastPushedId = None  # 🔹 Reset last pushed id
 
+    def undo_history(self):
+        song = self.history.undo()
+        self.lastPushedId = None  # ✅ reset เพื่อให้เพลงถัดไป push ได้
+        return song
+
+    def redo_history(self):
+        song = self.history.redo()
+        self.lastPushedId = None  # ✅ reset เช่นกัน
+        return song
 
 # ----------------------
 # Global Player Instance

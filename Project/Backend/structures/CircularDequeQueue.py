@@ -1,3 +1,4 @@
+# circular_deque_queue.py
 from .queue_node import QueueNode
 
 class CircularDequeQueue:
@@ -6,8 +7,8 @@ class CircularDequeQueue:
         self.current: QueueNode = None
         self.replay = replay
         self.size = 0
+        self.last_pushed_id = None  # ป้องกัน duplicate push
 
-    # Add song
     def add(self, song):
         new_node = QueueNode(song)
         new_node.index = self.size
@@ -24,24 +25,6 @@ class CircularDequeQueue:
             self.head.prev = new_node
         self.size += 1
 
-    # Remove first (dequeue)
-    def dequeue(self):
-        if not self.head:
-            return None
-        removed = self.head
-        if self.size == 1:
-            self.head = None
-            self.current = None
-        else:
-            self.head.prev.next = self.head.next
-            self.head.next.prev = self.head.prev
-            if self.current == self.head:
-                self.current = self.head.next
-            self.head = self.head.next
-            self._update_indices()
-        self.size -= 1
-        return removed.song
-
     def _update_indices(self):
         if not self.head:
             return
@@ -54,7 +37,6 @@ class CircularDequeQueue:
             if curr == self.head:
                 break
 
-    # Remove song by id
     def remove(self, song_id):
         if not self.head:
             return False
@@ -79,30 +61,108 @@ class CircularDequeQueue:
                 break
         return False
 
-    # Playback
-    def next_song(self):
+    def next_song(self, history_stack=None, force_dequeue=True):
         if not self.current:
             return None
+
         song = self.current.song
+
         if self.replay:
             self.current = self.current.next
         else:
-            self.dequeue()
+            if force_dequeue:
+                removed_song = song
+
+                if self.size == 1:
+                    # 🔹 เพลงเดียว: dequeue และ queue ว่าง
+                    self.head = None
+                    self.current = None
+                    self.size = 0
+                else:
+                    prev_node = self.current.prev
+                    next_node = self.current.next
+
+                    # fix links
+                    prev_node.next = next_node
+                    next_node.prev = prev_node
+
+                    # update head if needed
+                    if self.current == self.head:
+                        self.head = next_node
+
+                    # move current pointer
+                    self.current = next_node
+
+                    # update indices
+                    self._update_indices()
+
+                    self.size -= 1
+
+                # push to history
+                if history_stack and (self.last_pushed_id != removed_song.id):
+                    history_stack.push(removed_song, removed_song.id)
+                    self.last_pushed_id = removed_song.id
+            else:
+                self.current = self.current.next
+
         return song
 
-    def previous_song(self):
+    def previous_song(self, history_stack=None, force_dequeue=True):
         if not self.current:
             return None
-        self.current = self.current.prev
-        return self.current.song
+
+        song = self.current.song
+
+        if self.replay:
+            self.current = self.current.prev
+        else:
+            if force_dequeue:
+                removed_song = song
+
+                if self.size == 1:
+                    # 🔹 เพลงเดียว: dequeue และ queue ว่าง
+                    self.head = None
+                    self.current = None
+                    self.size = 0
+                else:
+                    prev_node = self.current.prev
+                    next_node = self.current.next
+
+                    # fix links
+                    prev_node.next = next_node
+                    next_node.prev = prev_node
+
+                    # update head if needed
+                    if self.current == self.head:
+                        self.head = next_node
+
+                    # move current pointer backward
+                    self.current = prev_node
+
+                    # update indices
+                    self._update_indices()
+
+                    self.size -= 1
+
+                # push to history
+                if history_stack and (self.last_pushed_id != removed_song.id):
+                    history_stack.push(removed_song, removed_song.id)
+                    self.last_pushed_id = removed_song.id
+            else:
+                self.current = self.current.prev
+
+        return song
 
     def get_current_song(self):
-        return self.current.song if self.current else None
+        if not self.current:
+            return None, -1
+        return self.current.song, self.current.index
 
     def clear(self):
         self.head = None
         self.current = None
         self.size = 0
+        self.last_pushed_id = None
 
     def to_list(self):
         songs = []
@@ -119,7 +179,6 @@ class CircularDequeQueue:
                 break
         return songs
 
-    # Toggle replay
     def toggle_replay(self):
         self.replay = not self.replay
         return self.replay
