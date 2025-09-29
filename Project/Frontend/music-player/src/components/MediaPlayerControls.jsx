@@ -18,19 +18,16 @@ const MediaPlayerControls = ({
   onNext,
   onPrevious,
   onSeek,
-  onToggleMute,
-  onSetVolume,
-  isMuted,
-  volume,
   onToggleLoop,
   isLooping,
+  volume,
+  isMuted,
+  onSetVolume,
+  onToggleMute,
 }) => {
   const [localVolume, setLocalVolume] = useState(volume);
-  const [hoverLoop, setHoverLoop] = useState(false); // hover state
 
-  useEffect(() => {
-    setLocalVolume(volume);
-  }, [volume]);
+  useEffect(() => setLocalVolume(volume), [volume]);
 
   const formatTime = (seconds) => {
     if (isNaN(seconds) || seconds < 0) return "0:00";
@@ -42,31 +39,29 @@ const MediaPlayerControls = ({
   const progressPercentage =
     totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
 
-  const handleProgressBarClick = (event) => {
-    const progressBar = event.target.closest(".progress-bar-container");
-    if (!progressBar) return;
-    const rect = progressBar.getBoundingClientRect();
-    const clickPosition = event.clientX - rect.left;
-    const newProgressTime = (clickPosition / rect.width) * totalDuration;
-    if (onSeek) onSeek(newProgressTime);
+  const handleProgressClick = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const newTime = (clickX / rect.width) * totalDuration;
+    onSeek?.(newTime);
   };
 
-  const handleVolumeChange = (event) => {
-    const newVolume = parseInt(event.target.value, 10);
-    setLocalVolume(newVolume);
-    if (onSetVolume) onSetVolume(newVolume);
+  const handleVolumeChange = (e) => {
+    const newVol = parseInt(e.target.value, 10);
+    setLocalVolume(newVol);
+    onSetVolume?.(newVol);
   };
 
   return (
     <div className="flex flex-col items-center p-6 bg-zinc-900 rounded-xl shadow-2xl max-w-2xl mx-auto border border-gray-800">
-      {/* Current Song Info */}
+      {/* Song Info */}
       <div className="flex items-center space-x-4 mb-6 w-full">
         <img
           src={
             currentSong?.url ||
             "https://t4.ftcdn.net/jpg/05/39/89/77/360_F_539897708_p3V5664JtSgb2CMRDV7QnqUJ9eqhLLqy.jpg"
           }
-          alt={currentSong?.title || "No song playing"}
+          alt={currentSong?.title || "Not Playing"}
           className="w-16 h-16 rounded-lg object-cover shadow-md"
         />
         <div className="flex-1">
@@ -82,13 +77,13 @@ const MediaPlayerControls = ({
       {/* Progress Bar */}
       <div className="w-full mb-6">
         <div
-          className="progress-bar-container w-full h-2 bg-zinc-700 rounded-full cursor-pointer group"
-          onClick={handleProgressBarClick}
+          className="w-full h-2 bg-zinc-700 rounded-full cursor-pointer"
+          onClick={handleProgressClick}
         >
           <div
-            className="h-2 bg-purple-600 rounded-full transition-all duration-100 ease-linear group-hover:bg-purple-500"
+            className="h-2 bg-purple-600 rounded-full transition-all duration-100 ease-linear"
             style={{ width: `${progressPercentage}%` }}
-          ></div>
+          />
         </div>
         <div className="flex justify-between w-full text-zinc-400 text-xs mt-2 font-mono">
           <span>{formatTime(currentTime)}</span>
@@ -100,57 +95,41 @@ const MediaPlayerControls = ({
       <div className="flex items-center justify-center space-x-6 mb-6">
         <button
           onClick={onPrevious}
-          className="p-3 text-white rounded-full transition-colors duration-200 ease-in-out hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="p-3 text-white rounded-full hover:bg-purple-600 focus:outline-none"
         >
           <FaStepBackward size={20} />
         </button>
 
         <button
           onClick={onPlayPause}
-          className="p-5 text-white bg-purple-600 rounded-full transition-colors duration-200 ease-in-out hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-800 shadow-xl"
+          className="p-5 text-white bg-purple-600 rounded-full hover:bg-purple-700 focus:outline-none shadow-xl"
         >
           {isPlaying ? <FaPause size={28} /> : <FaPlay size={28} />}
         </button>
 
         <button
           onClick={onNext}
-          className="p-3 text-white rounded-full transition-colors duration-200 ease-in-out hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="p-3 text-white rounded-full hover:bg-purple-600 focus:outline-none"
         >
           <FaStepForward size={20} />
         </button>
       </div>
 
-      {/* Loop/Replay and Volume */}
+      {/* Loop + Volume */}
       <div className="flex items-center justify-between w-full text-gray-400 text-sm mt-4">
-        {/* Replay/Loop Button */}
-        {/* Replay/Loop Button */}
         <button
-          onClick={() => {
-            console.log("Loop button clicked! Previous isLooping:", isLooping);
-            onToggleLoop?.();
-          }}
-          onMouseEnter={() => {
-            console.log("Loop hover enter");
-            setHoverLoop(true);
-          }}
-          onMouseLeave={() => {
-            console.log("Loop hover leave");
-            setHoverLoop(false);
-          }}
-          className={`p-2 rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-600 ${
-            isLooping || hoverLoop
-              ? "text-purple-400 hover:text-purple-500 bg-gray-800"
-              : "text-gray-400 hover:bg-gray-700"
+          onClick={onToggleLoop}
+          className={`p-2 rounded-full transition-colors duration-200 focus:outline-none ${
+            isLooping ? "text-purple-400 bg-gray-800" : "hover:bg-gray-700"
           }`}
         >
           <FaRedoAlt size={16} />
         </button>
 
-        {/* Volume Control */}
         <div className="flex items-center space-x-2 flex-grow mx-4">
           <button
             onClick={onToggleMute}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-white"
           >
             {isMuted || localVolume === 0 ? (
               <FaVolumeMute size={16} />
@@ -164,7 +143,7 @@ const MediaPlayerControls = ({
             max="100"
             value={localVolume}
             onChange={handleVolumeChange}
-            className="w-full h-1 bg-zinc-700 rounded-lg appearance-none cursor-pointer range-sm accent-purple-600"
+            className="w-full h-1 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-purple-600"
           />
         </div>
       </div>

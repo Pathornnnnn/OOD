@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 
-const QueueDisplay = ({ queue }) => {
+const QueueDisplay = ({ queue, currentIndex }) => {
   const [hoverIndex, setHoverIndex] = useState(null);
-
-  // หา current index จาก queue
-  const currentIndex = queue.findIndex(
-    (track) => track.index === queue[0]?.index
-  );
 
   return (
     <div className="p-4 bg-zinc-900 rounded-lg shadow-xl max-w-2xl mx-auto">
@@ -14,14 +9,14 @@ const QueueDisplay = ({ queue }) => {
       <ul className="space-y-4 relative">
         {queue.length > 0 ? (
           queue.map((track, idx) => {
-            const isCurrent = idx === currentIndex;
+            const isCurrent = track.index === currentIndex; // ✅ ใช้ index จาก backend
             const isHover = idx === hoverIndex;
 
             return (
               <li
                 key={track.index}
                 className={`
-                  p-3 rounded-md transition-all duration-300 relative cursor-pointer
+                  p-3 rounded-md transition-all duration-300 relative cursor-pointer gap-5
                   ${
                     isCurrent
                       ? "bg-purple-600 text-white shadow-lg"
@@ -33,7 +28,7 @@ const QueueDisplay = ({ queue }) => {
                 onMouseEnter={() => setHoverIndex(idx)}
                 onMouseLeave={() => setHoverIndex(null)}
               >
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center gap-5">
                   <span
                     className={`font-medium truncate ${
                       isCurrent || isHover ? "text-white" : "text-zinc-200"
@@ -46,17 +41,6 @@ const QueueDisplay = ({ queue }) => {
                     {("0" + (track.duration % 60)).slice(-2)}
                   </span>
                 </div>
-
-                {idx < queue.length - 1 && (
-                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-400">
-                    ➡️
-                  </div>
-                )}
-                {idx === queue.length - 1 && queue.length > 1 && (
-                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-400 animate-pulse">
-                    🔄
-                  </div>
-                )}
               </li>
             );
           })
