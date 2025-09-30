@@ -1,5 +1,5 @@
 # circular_deque_queue.py
-from .queue_node import QueueNode
+from Backend.models.node import QueueNode
 
 class CircularDequeQueue:
     def __init__(self, replay=False):

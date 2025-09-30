@@ -30,10 +30,10 @@ class HybridMusicPlayer:
     # Queue Methods
     # ----------------------
     def add_to_queue(self, song: Song):
-        if not isinstance(song, Song):
-            raise ValueError("Only Song objects can be added to queue")
+        if not isinstance(song, SongNode):
+            raise ValueError("Only SongNode objects can be added to queue")
         self.queue.add(song)
-
+        
     def remove_from_queue(self, song_id: int):
         if self.queue.head is None:
             return False
