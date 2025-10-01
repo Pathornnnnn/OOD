@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from Backend.core.hybrid_music_player import player
 from Backend.data.mock_data import init_data
-from Backend.models.song import *
 router = APIRouter()
 
 # ------------------------------

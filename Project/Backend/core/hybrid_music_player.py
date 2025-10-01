@@ -1,4 +1,3 @@
-from Backend.models.song import Song
 from Backend.structures.ThreeLevelLinkedList import ThreeLevelLinkedList
 from Backend.structures.CircularDequeQueue import CircularDequeQueue
 from Backend.structures.stack_history import StackHistory
@@ -29,7 +28,7 @@ class HybridMusicPlayer:
     # ----------------------
     # Queue Methods
     # ----------------------
-    def add_to_queue(self, song: Song):
+    def add_to_queue(self, song: SongNode):
         if not isinstance(song, SongNode):
             raise ValueError("Only SongNode objects can be added to queue")
         self.queue.add(song)
