@@ -157,7 +157,3 @@ if __name__ == "__main__":
     print("\n=== After shifting row 3 left ===")
     puzzle.shift_row_left(3)  #เลื่อนแถวที่ 3 ไปซ้าย 
     puzzle.display()
-    
-    print(  )
-    puzzle.shift_column_up(0)
-    puzzle.display()
